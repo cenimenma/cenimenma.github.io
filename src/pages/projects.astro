@@ -1,0 +1,125 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import { profile, projects } from '../site-data';
+
+const title = `Projects · ${profile.name}`;
+const description = `${profile.name} 的作品集与项目`;
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={title} description={description} />
+	</head>
+	<body>
+		<Header />
+		<main class="projects">
+			<h1>作品集</h1>
+			<p class="lead">我做过的一些项目。点击 Demo 查看效果，或 Source 查看源码。</p>
+			<div class="cards">
+				{
+					projects.map((p) => (
+						<article class="card">
+							{p.image && <img src={p.image} alt={p.title} />}
+							<div class="card-body">
+								<h2>{p.title}</h2>
+								<p>{p.description}</p>
+								<ul class="tags">
+									{p.tags.map((t) => (
+										<li>{t}</li>
+									))}
+								</ul>
+								<div class="card-links">
+									{p.demoUrl && (
+										<a href={p.demoUrl} target="_blank" rel="noopener noreferrer">
+											Demo →
+										</a>
+									)}
+									{p.repoUrl && (
+										<a href={p.repoUrl} target="_blank" rel="noopener noreferrer">
+											Source
+										</a>
+									)}
+								</div>
+							</div>
+						</article>
+					))
+				}
+			</div>
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<style>
+	.projects {
+		width: 900px;
+	}
+	.lead {
+		color: rgb(var(--gray));
+		margin-bottom: 2em;
+	}
+	.cards {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+		gap: 1.5em;
+	}
+	.card {
+		border: 1px solid rgb(var(--gray-light));
+		border-radius: 14px;
+		background: #fff;
+		overflow: hidden;
+		transition: 0.2s ease;
+		display: flex;
+		flex-direction: column;
+	}
+	.card:hover {
+		box-shadow: var(--box-shadow);
+		transform: translateY(-2px);
+	}
+	.card img {
+		width: 100%;
+		border-radius: 0;
+	}
+	.card-body {
+		padding: 1.5em;
+		display: flex;
+		flex-direction: column;
+		flex-grow: 1;
+	}
+	.card h2 {
+		font-size: 1.35em;
+		margin-bottom: 0.4em;
+	}
+	.card p {
+		margin: 0 0 1em;
+		color: rgb(var(--gray-dark));
+		font-size: 0.95rem;
+		flex-grow: 1;
+	}
+	.tags {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5em;
+		list-style: none;
+		margin: 0 0 1em;
+		padding: 0;
+	}
+	.tags li {
+		padding: 0.2em 0.7em;
+		border-radius: 999px;
+		background: rgb(var(--gray-light));
+		color: rgb(var(--gray-dark));
+		font-size: 0.85rem;
+	}
+	.card-links {
+		display: flex;
+		gap: 1em;
+		font-weight: 700;
+	}
+	.card-links a {
+		text-decoration: none;
+	}
+</style>

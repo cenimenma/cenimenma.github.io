@@ -1,0 +1,191 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import Icon from '../components/Icon.astro';
+import { experiences, profile, skillGroups, socials } from '../site-data';
+
+const title = `About · ${profile.name}`;
+const description = `关于 ${profile.name}：经历、技能与联系方式`;
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={title} description={description} />
+	</head>
+	<body>
+		<Header />
+		<main class="about">
+			<h1>关于我</h1>
+			<p class="lead">
+				这里是自我介绍的段落。讲讲你是谁、你在做什么、你关注的方向，以及一些工作之外的兴趣。
+				把这段文字改成你自己的故事——编辑 <code>src/pages/about.astro</code> 即可。
+			</p>
+			<p class="meta">
+				📍 {profile.location} · ✉️ <a href={`mailto:${profile.email}`}>{profile.email}</a>
+			</p>
+			<div class="social-row">
+				{
+					socials.map((s) => (
+						<a href={s.url} target="_blank" rel="noopener noreferrer" class="icon-btn">
+							<span class="sr-only">{s.label}</span>
+							<Icon name={s.icon} size={20} />
+						</a>
+					))
+				}
+				{
+					profile.resumeUrl && (
+						<a class="btn" href={profile.resumeUrl} download>
+							下载简历
+						</a>
+					)
+				}
+			</div>
+
+			<h2 class="section-title">经历</h2>
+			<div class="timeline">
+				{
+					experiences.map((e) => (
+						<div class="item">
+							<div class="period">{e.period}</div>
+							<div class="detail">
+								<h3>
+									{e.role} · <span class="org">{e.org}</span>
+								</h3>
+								<p>{e.summary}</p>
+							</div>
+						</div>
+					))
+				}
+			</div>
+
+			<h2 class="section-title">技能</h2>
+			<div class="skills">
+				{
+					skillGroups.map((g) => (
+						<div class="skill-group">
+							<h3>{g.category}</h3>
+							<ul class="tags">
+								{g.items.map((item) => (
+									<li>{item}</li>
+								))}
+							</ul>
+						</div>
+					))
+				}
+			</div>
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<style>
+	.about {
+		width: 760px;
+	}
+	.lead {
+		font-size: 1.1em;
+		color: rgb(var(--gray-dark));
+	}
+	.meta {
+		color: rgb(var(--gray));
+		font-size: 0.95rem;
+	}
+	.social-row {
+		display: flex;
+		align-items: center;
+		gap: 0.6em;
+		flex-wrap: wrap;
+		margin-bottom: 2.5em;
+	}
+	.icon-btn {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 40px;
+		height: 40px;
+		border-radius: 10px;
+		color: rgb(var(--gray-dark));
+		background: rgb(var(--gray-light));
+		transition: 0.2s ease;
+	}
+	.icon-btn:hover {
+		color: #fff;
+		background: var(--accent);
+	}
+	.btn {
+		display: inline-block;
+		padding: 0.5em 1.1em;
+		border-radius: 10px;
+		background: var(--accent);
+		color: #fff;
+		text-decoration: none;
+		font-weight: 700;
+	}
+	.btn:hover {
+		background: var(--accent-dark);
+		color: #fff;
+	}
+	.section-title {
+		font-size: 1.563em;
+		margin: 1.5em 0 0.75em;
+	}
+	.timeline {
+		display: flex;
+		flex-direction: column;
+		gap: 1.5em;
+		margin-bottom: 2em;
+	}
+	.item {
+		display: grid;
+		grid-template-columns: 160px 1fr;
+		gap: 1em;
+	}
+	.period {
+		color: rgb(var(--gray));
+		font-size: 0.9rem;
+		padding-top: 0.3em;
+	}
+	.detail h3 {
+		font-size: 1.15em;
+		margin-bottom: 0.3em;
+	}
+	.org {
+		color: var(--accent);
+	}
+	.detail p {
+		margin: 0;
+		color: rgb(var(--gray-dark));
+	}
+	.skills {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+		gap: 1.5em;
+	}
+	.skill-group h3 {
+		font-size: 1.1em;
+		margin-bottom: 0.5em;
+	}
+	.tags {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5em;
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+	.tags li {
+		padding: 0.2em 0.7em;
+		border-radius: 999px;
+		background: rgb(var(--gray-light));
+		color: rgb(var(--gray-dark));
+		font-size: 0.85rem;
+	}
+	@media (max-width: 720px) {
+		.item {
+			grid-template-columns: 1fr;
+			gap: 0.2em;
+		}
+	}
+</style>

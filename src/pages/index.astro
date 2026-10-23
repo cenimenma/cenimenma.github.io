@@ -1,0 +1,346 @@
+---
+import { getCollection } from 'astro:content';
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import FormattedDate from '../components/FormattedDate.astro';
+import Header from '../components/Header.astro';
+import Icon from '../components/Icon.astro';
+import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+import { profile, projects, skillGroups, socials } from '../site-data';
+
+const featured = projects.filter((p) => p.featured).slice(0, 3);
+const recentPosts = (await getCollection('blog'))
+	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+	.slice(0, 3);
+
+const initials = profile.name
+	.split(/\s+/)
+	.map((w) => w[0])
+	.filter(Boolean)
+	.slice(0, 2)
+	.join('')
+	.toUpperCase();
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+	</head>
+	<body>
+		<Header />
+		<main class="home">
+			<!-- Hero -->
+			<section class="hero">
+				<div class="avatar">
+					<span class="initials">{initials}</span>
+					<img src={profile.avatar} alt={profile.name} onerror="this.remove()" />
+				</div>
+				<div class="hero-text">
+					<h1>{profile.name}</h1>
+					<p class="role">{profile.role}</p>
+					<p class="tagline">{profile.tagline}</p>
+					<div class="actions">
+						<div class="social-row">
+							{
+								socials.map((s) => (
+									<a href={s.url} target="_blank" rel="noopener noreferrer" class="icon-btn">
+										<span class="sr-only">{s.label}</span>
+										<Icon name={s.icon} size={20} />
+									</a>
+								))
+							}
+						</div>
+						{
+							profile.resumeUrl && (
+								<a class="btn" href={profile.resumeUrl} download>
+									下载简历
+								</a>
+							)
+						}
+					</div>
+				</div>
+			</section>
+
+			<!-- Skills -->
+			<section>
+				<h2 class="section-title">技能</h2>
+				<div class="skills">
+					{
+						skillGroups.map((g) => (
+							<div class="skill-group">
+								<h3>{g.category}</h3>
+								<ul class="tags">
+									{g.items.map((item) => (
+										<li>{item}</li>
+									))}
+								</ul>
+							</div>
+						))
+					}
+				</div>
+			</section>
+
+			<!-- Featured projects -->
+			<section>
+				<div class="section-head">
+					<h2 class="section-title">精选项目</h2>
+					<a href="/projects" class="more">查看全部 →</a>
+				</div>
+				<div class="cards">
+					{
+						featured.map((p) => (
+							<article class="card">
+								<h3>{p.title}</h3>
+								<p>{p.description}</p>
+								<ul class="tags">
+									{p.tags.map((t) => (
+										<li>{t}</li>
+									))}
+								</ul>
+								<div class="card-links">
+									{p.demoUrl && (
+										<a href={p.demoUrl} target="_blank" rel="noopener noreferrer">
+											Demo
+										</a>
+									)}
+									{p.repoUrl && (
+										<a href={p.repoUrl} target="_blank" rel="noopener noreferrer">
+											Source
+										</a>
+									)}
+								</div>
+							</article>
+						))
+					}
+				</div>
+			</section>
+
+			<!-- Recent posts -->
+			<section>
+				<div class="section-head">
+					<h2 class="section-title">最新文章</h2>
+					<a href="/blog" class="more">全部文章 →</a>
+				</div>
+				<ul class="post-list">
+					{
+						recentPosts.map((post) => (
+							<li>
+								<a href={`/blog/${post.id}/`}>
+									<span class="post-title">{post.data.title}</span>
+									<span class="post-date">
+										<FormattedDate date={post.data.pubDate} />
+									</span>
+								</a>
+							</li>
+						))
+					}
+				</ul>
+			</section>
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<style>
+	.home {
+		width: 900px;
+	}
+	section {
+		margin-bottom: 3em;
+	}
+	.hero {
+		display: flex;
+		gap: 2em;
+		align-items: center;
+	}
+	.avatar {
+		position: relative;
+		flex: 0 0 auto;
+		width: 140px;
+		height: 140px;
+		border-radius: 50%;
+		overflow: hidden;
+		background: var(--accent);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		box-shadow: var(--box-shadow);
+	}
+	.avatar img {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		border-radius: 50%;
+	}
+	.avatar .initials {
+		color: #fff;
+		font-size: 3rem;
+		font-weight: 700;
+	}
+	.hero-text h1 {
+		margin-bottom: 0.1em;
+	}
+	.role {
+		margin: 0 0 0.5em;
+		color: var(--accent);
+		font-weight: 700;
+		font-size: 1.25em;
+	}
+	.tagline {
+		margin: 0 0 1em;
+		color: rgb(var(--gray-dark));
+	}
+	.actions {
+		display: flex;
+		align-items: center;
+		gap: 1em;
+		flex-wrap: wrap;
+	}
+	.social-row {
+		display: flex;
+		gap: 0.5em;
+	}
+	.icon-btn {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 40px;
+		height: 40px;
+		border-radius: 10px;
+		color: rgb(var(--gray-dark));
+		background: rgb(var(--gray-light));
+		transition: 0.2s ease;
+	}
+	.icon-btn:hover {
+		color: #fff;
+		background: var(--accent);
+	}
+	.btn {
+		display: inline-block;
+		padding: 0.5em 1.1em;
+		border-radius: 10px;
+		background: var(--accent);
+		color: #fff;
+		text-decoration: none;
+		font-weight: 700;
+		transition: 0.2s ease;
+	}
+	.btn:hover {
+		background: var(--accent-dark);
+		color: #fff;
+	}
+	.section-head {
+		display: flex;
+		align-items: baseline;
+		justify-content: space-between;
+	}
+	.section-title {
+		font-size: 1.563em;
+		margin-bottom: 0.75em;
+	}
+	.more {
+		font-size: 0.9rem;
+		text-decoration: none;
+	}
+	.skills {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+		gap: 1.5em;
+	}
+	.skill-group h3 {
+		font-size: 1.1em;
+		margin-bottom: 0.5em;
+	}
+	.tags {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5em;
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+	.tags li {
+		padding: 0.2em 0.7em;
+		border-radius: 999px;
+		background: rgb(var(--gray-light));
+		color: rgb(var(--gray-dark));
+		font-size: 0.85rem;
+	}
+	.cards {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+		gap: 1.5em;
+	}
+	.card {
+		padding: 1.5em;
+		border: 1px solid rgb(var(--gray-light));
+		border-radius: 14px;
+		background: #fff;
+		transition: 0.2s ease;
+		display: flex;
+		flex-direction: column;
+	}
+	.card:hover {
+		box-shadow: var(--box-shadow);
+		transform: translateY(-2px);
+	}
+	.card h3 {
+		font-size: 1.25em;
+		margin-bottom: 0.4em;
+	}
+	.card p {
+		margin: 0 0 1em;
+		color: rgb(var(--gray-dark));
+		font-size: 0.95rem;
+		flex-grow: 1;
+	}
+	.card .tags {
+		margin-bottom: 1em;
+	}
+	.card-links {
+		display: flex;
+		gap: 1em;
+		font-weight: 700;
+	}
+	.card-links a {
+		text-decoration: none;
+	}
+	.post-list {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+	.post-list li a {
+		display: flex;
+		justify-content: space-between;
+		gap: 1em;
+		padding: 0.9em 0;
+		border-bottom: 1px solid rgb(var(--gray-light));
+		text-decoration: none;
+		color: rgb(var(--gray-dark));
+	}
+	.post-list li a:hover .post-title {
+		color: var(--accent);
+	}
+	.post-title {
+		font-weight: 700;
+		color: rgb(var(--black));
+	}
+	.post-date {
+		color: rgb(var(--gray));
+		white-space: nowrap;
+		font-size: 0.9rem;
+	}
+	@media (max-width: 720px) {
+		.hero {
+			flex-direction: column;
+			text-align: center;
+		}
+		.actions {
+			justify-content: center;
+		}
+	}
+</style>
