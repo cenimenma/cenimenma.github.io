@@ -25,6 +25,7 @@ const description = `${profile.name} 的作品集与项目`;
 							{p.image && <img src={p.image} alt={p.title} />}
 							<div class="card-body">
 								<h2>{p.title}</h2>
+								{p.period && <p class="period">{p.period}</p>}
 								<p>{p.description}</p>
 								<ul class="tags">
 									{p.tags.map((t) => (
@@ -92,6 +93,11 @@ const description = `${profile.name} 的作品集与项目`;
 	.card h2 {
 		font-size: 1.35em;
 		margin-bottom: 0.4em;
+	}
+	.card .period {
+		margin: -0.2em 0 0.8em;
+		color: rgb(var(--gray));
+		font-size: 0.85rem;
 	}
 	.card p {
 		margin: 0 0 1em;

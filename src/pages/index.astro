@@ -38,8 +38,8 @@ const initials = profile.name
 				</div>
 				<div class="hero-text">
 					<h1>{profile.name}</h1>
-					<p class="role">{profile.role}</p>
-					<p class="tagline">{profile.tagline}</p>
+					{profile.role && <p class="role">{profile.role}</p>}
+					{profile.tagline && <p class="tagline">{profile.tagline}</p>}
 					<div class="actions">
 						<div class="social-row">
 							{
@@ -63,23 +63,25 @@ const initials = profile.name
 			</section>
 
 			<!-- Skills -->
-			<section>
-				<h2 class="section-title">技能</h2>
-				<div class="skills">
-					{
-						skillGroups.map((g) => (
-							<div class="skill-group">
-								<h3>{g.category}</h3>
-								<ul class="tags">
-									{g.items.map((item) => (
-										<li>{item}</li>
-									))}
-								</ul>
-							</div>
-						))
-					}
-				</div>
-			</section>
+			{
+				skillGroups.length > 0 && (
+					<section>
+						<h2 class="section-title">技能</h2>
+						<div class="skills">
+							{skillGroups.map((g) => (
+								<div class="skill-group">
+									<h3>{g.category}</h3>
+									<ul class="tags">
+										{g.items.map((item) => (
+											<li>{item}</li>
+										))}
+									</ul>
+								</div>
+							))}
+						</div>
+					</section>
+				)
+			}
 
 			<!-- Featured projects -->
 			<section>
@@ -92,6 +94,7 @@ const initials = profile.name
 						featured.map((p) => (
 							<article class="card">
 								<h3>{p.title}</h3>
+								{p.period && <p class="period">{p.period}</p>}
 								<p>{p.description}</p>
 								<ul class="tags">
 									{p.tags.map((t) => (
@@ -290,6 +293,11 @@ const initials = profile.name
 	.card h3 {
 		font-size: 1.25em;
 		margin-bottom: 0.4em;
+	}
+	.card .period {
+		margin: -0.2em 0 0.8em;
+		color: rgb(var(--gray));
+		font-size: 0.85rem;
 	}
 	.card p {
 		margin: 0 0 1em;

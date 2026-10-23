@@ -6,9 +6,8 @@ import { defineConfig, fontProviders } from 'astro/config';
 
 // https://astro.build/config
 export default defineConfig({
-	// GitHub Pages 用户主页：把 your-username 换成你的 GitHub 用户名。
-	// 用户主页仓库名必须是 your-username.github.io，站点根路径为 '/'，无需设置 base。
-	site: 'https://your-username.github.io',
+	// GitHub Pages 用户主页：仓库名必须是 cenimenma.github.io，站点根路径为 '/'。
+	site: 'https://cenimenma.github.io',
 	integrations: [mdx(), sitemap()],
 	fonts: [
 		{

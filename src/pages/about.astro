@@ -43,38 +43,46 @@ const description = `关于 ${profile.name}：经历、技能与联系方式`;
 				}
 			</div>
 
-			<h2 class="section-title">经历</h2>
-			<div class="timeline">
-				{
-					experiences.map((e) => (
-						<div class="item">
-							<div class="period">{e.period}</div>
-							<div class="detail">
-								<h3>
-									{e.role} · <span class="org">{e.org}</span>
-								</h3>
-								<p>{e.summary}</p>
-							</div>
+			{
+				experiences.length > 0 && (
+					<>
+						<h2 class="section-title">经历</h2>
+						<div class="timeline">
+							{experiences.map((e) => (
+								<div class="item">
+									<div class="period">{e.period}</div>
+									<div class="detail">
+										<h3>
+											{e.role} · <span class="org">{e.org}</span>
+										</h3>
+										<p>{e.summary}</p>
+									</div>
+								</div>
+							))}
 						</div>
-					))
-				}
-			</div>
+					</>
+				)
+			}
 
-			<h2 class="section-title">技能</h2>
-			<div class="skills">
-				{
-					skillGroups.map((g) => (
-						<div class="skill-group">
-							<h3>{g.category}</h3>
-							<ul class="tags">
-								{g.items.map((item) => (
-									<li>{item}</li>
-								))}
-							</ul>
+			{
+				skillGroups.length > 0 && (
+					<>
+						<h2 class="section-title">技能</h2>
+						<div class="skills">
+							{skillGroups.map((g) => (
+								<div class="skill-group">
+									<h3>{g.category}</h3>
+									<ul class="tags">
+										{g.items.map((item) => (
+											<li>{item}</li>
+										))}
+									</ul>
+								</div>
+							))}
 						</div>
-					))
-				}
-			</div>
+					</>
+				)
+			}
 		</main>
 		<Footer />
 	</body>
